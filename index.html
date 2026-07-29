@@ -18,7 +18,15 @@ h1{font-size:32px;margin:0 0 8px;letter-spacing:-.02em}
 .t{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 17px;flex:1;min-width:150px}
 .t .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint)}
 .t .v{font-size:23px;font-weight:660;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.t.hero{border-color:var(--accent);flex:2.2;min-width:255px}
+.t.hero .v{font-size:37px;color:var(--accent);line-height:1.15}
+.t.hero .kk{font-size:12px;color:var(--dim);margin-top:2px}
 h2{font-size:15px;text-transform:uppercase;letter-spacing:.09em;color:var(--faint);margin:0 0 14px;font-weight:600}
+.h2n{text-transform:none;letter-spacing:0;font-weight:400;font-size:13px}
+.rc-pc{font-size:27px;font-weight:670;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.1}
+.rc-pc small{font-size:12px;color:var(--faint);font-weight:500;margin-left:2px}
+.rn small{font-size:11px;color:var(--faint);font-weight:500}
+.rc-stat b small{font-weight:500}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(246px,1fr));gap:14px}
 .rcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:inherit;
  display:flex;flex-direction:column;gap:7px;transition:border-color .15s,transform .15s}
@@ -30,6 +38,15 @@ h2{font-size:15px;text-transform:uppercase;letter-spacing:.09em;color:var(--fain
 .rc-bar span{display:block;height:100%;background:var(--accent);border-radius:3px}
 .rc-stat{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);font-variant-numeric:tabular-nums}
 .rc-stat b{color:var(--ink);font-weight:600} .rc-stat small{color:var(--faint);font-weight:400}
+.lv{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.lvrow{display:grid;grid-template-columns:170px 92px 1fr;gap:14px;align-items:baseline;padding:12px 17px;border-top:1px solid var(--line)}
+.lvrow:first-child{border-top:none}
+.lvrow.sub{padding:7px 17px 7px 30px;background:var(--panel2)}
+.lvrow.sub .lvk,.lvrow.sub .lvv{font-size:12.5px;color:var(--dim);font-weight:500}
+.lvk{font-size:14px;font-weight:620}
+.lvv{font-size:19px;font-weight:660;color:var(--accent);font-variant-numeric:tabular-nums;text-align:right}
+.lvd{font-size:13px;color:var(--dim)} .lvd b{color:var(--ink)}
+@media(max-width:640px){.lvrow{grid-template-columns:1fr auto;gap:6px}.lvd{grid-column:1/-1}}
 .notes{margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:16px}
 .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:11px;padding:15px 17px}
 .note h3{font-size:14px;margin:0 0 6px}
@@ -45,78 +62,115 @@ footer a{color:var(--dim)}
 각 회차·구성마다 <b>어떤 큐가 오더라도 그 큐의 최선 셋업을 쓸 수 있는</b> 최소 커버링 집합을 싣습니다.</p>
 
 <div class="tot">
- <div class="t"><div class="k">회차</div><div class="v">8</div></div>
- <div class="t"><div class="k">구성(라벨)</div><div class="v">568</div></div>
- <div class="t"><div class="k">셋업</div><div class="v">7,018</div></div>
- <div class="t"><div class="k">커버된 큐 순서</div><div class="v">817,740</div></div>
+ <div class="t hero"><div class="k">전체 평균 PC 확률</div><div class="v" id="g-pc">98.11%</div>
+   <div class="kk">이 북대로 두었을 때, 무작위 회차·무작위 큐에서 이번 PC가 성공할 확률</div></div>
+ <div class="t"><div class="k">전체 평균 V*</div><div class="v" id="g-v">4,267</div></div>
+ <div class="t"><div class="k">구성(라벨)</div><div class="v" id="g-lab">568</div></div>
+ <div class="t"><div class="k">셋업</div><div class="v" id="g-set">7,018</div></div>
 </div>
 
-<h2>회차 선택</h2>
+<h2>회차 선택 <span class="h2n">— 카드의 큰 숫자가 그 회차의 평균 PC 확률</span></h2>
 <div class="grid">
-<a class="rcard" href="round1.html">
-  <div class="rc-top"><span class="rn">1회차</span><span class="rl">1 구성</span></div>
-  <div class="rc-bar"><span style="width:90.3%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>4,228 – 4,228</b></div>
-  <div class="rc-stat"><span>셋업</span><b>67<small> · 구성당 67.0</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">full</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">full</b></div>
+<a class="rcard" href="round1.html" data-r="1" data-v00="97.1|4228|1|67|67.0|full|97.1|full|97.1" data-v01="96.6|4206|43|1186|27.6|T>O|100.0|S>T|85.6" data-v10="97.1|4228|7|243|34.7|O>O|97.9|T>T|95.9" data-v11="96.6|4206|49|1362|27.8|T>O|100.0|S>T|85.6">
+  <div class="rc-top"><span class="rn">1회차</span><span class="rl"><b class="f-lab">1</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">97.1</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:90.4%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,228</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">67</span><small> · 구성당 <span class="f-avg">67.0</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">full</span> <small><span class="f-hip">97.1</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">full</span> <small><span class="f-lop">97.1</span>%</small></b></div>
 </a>
-<a class="rcard" href="round2.html">
-  <div class="rc-top"><span class="rn">2회차</span><span class="rl">140 구성</span></div>
-  <div class="rc-bar"><span style="width:99.4%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>3,888 – 4,352</b></div>
-  <div class="rc-stat"><span>셋업</span><b>1,289<small> · 구성당 9.2</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">IJLO</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">JOOZ</b></div>
+<a class="rcard" href="round2.html" data-r="2">
+  <div class="rc-top"><span class="rn">2회차</span><span class="rl"><b class="f-lab">140</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">99.0</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:96.7%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,308</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">1,289</span><small> · 구성당 <span class="f-avg">9.2</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">IJLO</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">JOOZ</span> <small><span class="f-lop">89.5</span>%</small></b></div>
 </a>
-<a class="rcard" href="round3.html">
-  <div class="rc-top"><span class="rn">3회차</span><span class="rl">7 구성</span></div>
-  <div class="rc-bar"><span style="width:99.2%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>4,159 – 4,349</b></div>
-  <div class="rc-stat"><span>셋업</span><b>403<small> · 구성당 57.6</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">T</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">S</b></div>
+<a class="rcard" href="round3.html" data-r="3">
+  <div class="rc-top"><span class="rn">3회차</span><span class="rl"><b class="f-lab">7</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">97.8</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:92.6%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,254</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">403</span><small> · 구성당 <span class="f-avg">57.6</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">T</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">S</span> <small><span class="f-lop">95.6</span>%</small></b></div>
 </a>
-<a class="rcard" href="round4.html">
-  <div class="rc-top"><span class="rn">4회차</span><span class="rl">161 구성</span></div>
-  <div class="rc-bar"><span style="width:99.4%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>3,058 – 4,352</b></div>
-  <div class="rc-stat"><span>셋업</span><b>416<small> · 구성당 2.6</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">O>STZ</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">Z>IJT</b></div>
+<a class="rcard" href="round4.html" data-r="4">
+  <div class="rc-top"><span class="rn">4회차</span><span class="rl"><b class="f-lab">161</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">97.8</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:92.6%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,253</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">416</span><small> · 구성당 <span class="f-avg">2.6</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">O>STZ</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">Z>IJT</span> <small><span class="f-lop">70.3</span>%</small></b></div>
 </a>
-<a class="rcard" href="round5.html">
-  <div class="rc-top"><span class="rn">5회차</span><span class="rl">28 구성</span></div>
-  <div class="rc-bar"><span style="width:99.2%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>4,091 – 4,349</b></div>
-  <div class="rc-stat"><span>셋업</span><b>933<small> · 구성당 33.3</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">JT</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">ZZ</b></div>
+<a class="rcard" href="round5.html" data-r="5">
+  <div class="rc-top"><span class="rn">5회차</span><span class="rl"><b class="f-lab">28</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">98.9</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:96.2%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,297</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">933</span><small> · 구성당 <span class="f-avg">33.3</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">JT</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">ZZ</span> <small><span class="f-lop">94.2</span>%</small></b></div>
 </a>
-<a class="rcard" href="round6.html">
-  <div class="rc-top"><span class="rn">6회차</span><span class="rl">112 구성</span></div>
-  <div class="rc-bar"><span style="width:99.5%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>3,451 – 4,353</b></div>
-  <div class="rc-stat"><span>셋업</span><b>1,182<small> · 구성당 10.6</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">O>SZ</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">S>IT</b></div>
+<a class="rcard" href="round6.html" data-r="6">
+  <div class="rc-top"><span class="rn">6회차</span><span class="rl"><b class="f-lab">112</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">96.9</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:89.8%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,215</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">1,182</span><small> · 구성당 <span class="f-avg">10.6</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">O>SZ</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">S>IT</span> <small><span class="f-lop">79.4</span>%</small></b></div>
 </a>
-<a class="rcard" href="round7.html">
-  <div class="rc-top"><span class="rn">7회차</span><span class="rl">77 구성</span></div>
-  <div class="rc-bar"><span style="width:99.1%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>4,155 – 4,348</b></div>
-  <div class="rc-stat"><span>셋업</span><b>1,609<small> · 구성당 20.9</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">ILT</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">SSZ</b></div>
+<a class="rcard" href="round7.html" data-r="7">
+  <div class="rc-top"><span class="rn">7회차</span><span class="rl"><b class="f-lab">77</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">99.8</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:99.4%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,339</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">1,609</span><small> · 구성당 <span class="f-avg">20.9</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">ILT</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">SSZ</span> <small><span class="f-lop">95.7</span>%</small></b></div>
 </a>
-<a class="rcard" href="round8.html">
-  <div class="rc-top"><span class="rn">8회차</span><span class="rl">42 구성</span></div>
-  <div class="rc-bar"><span style="width:99.4%"></span></div>
-  <div class="rc-stat"><span>달성 V*</span><b>3,727 – 4,352</b></div>
-  <div class="rc-stat"><span>셋업</span><b>1,119<small> · 구성당 26.6</small></b></div>
-  <div class="rc-stat"><span>최고 구성</span><b class="mono">T>O</b></div>
-  <div class="rc-stat"><span>최난 구성</span><b class="mono">S>T</b></div>
+<a class="rcard" href="round8.html" data-r="8">
+  <div class="rc-top"><span class="rn">8회차<small> 중복</small></span><span class="rl"><b class="f-lab">42</b> 구성</span></div>
+  <div class="rc-pc"><b class="f-pc">96.5</b><small>% PC</small></div>
+  <div class="rc-bar"><span class="f-bar" style="width:88.4%"></span></div>
+  <div class="rc-stat"><span>평균 V*</span><b class="f-v">4,202</b></div>
+  <div class="rc-stat"><span>셋업</span><b><span class="f-set">1,119</span><small> · 구성당 <span class="f-avg">26.6</span></small></b></div>
+  <div class="rc-stat"><span>최고 구성</span><b class="mono"><span class="f-hi">T>O</span> <small><span class="f-hip">100.0</span>%</small></b></div>
+  <div class="rc-stat"><span>최난 구성</span><b class="mono"><span class="f-lo">S>T</span> <small><span class="f-lop">85.6</span>%</small></b></div>
 </a>
+</div>
+
+<h2 style="margin-top:40px">평균의 세 층위</h2>
+<div class="lv">
+ <div class="lvrow"><span class="lvk">전체</span>
+   <span class="lvv" id="g-pc2">98.11%</span>
+   <span class="lvd">7개 bag 페이즈를 균등 가중. 8회차는 별도 페이즈가 아니라 <b>1회차의 중복-구성 절반</b>이라, 페이즈 1은 언제나 1·8회차를 순서 수로 합쳐 셉니다.</span></div>
+<div class="lvrow sub"><span class="lvk mono">페이즈 1 (1+8회차)</span>
+   <span class="lvv">96.61%</span>
+   <span class="lvd">평균 V* 4,206 · 순서 35,280</span></div><div class="lvrow sub"><span class="lvk mono">페이즈 2 (2회차)</span>
+   <span class="lvv">99.01%</span>
+   <span class="lvd">평균 V* 4,308 · 순서 308,700</span></div><div class="lvrow sub"><span class="lvk mono">페이즈 3 (3회차)</span>
+   <span class="lvv">97.77%</span>
+   <span class="lvd">평균 V* 4,254 · 순서 35,280</span></div><div class="lvrow sub"><span class="lvk mono">페이즈 4 (4회차)</span>
+   <span class="lvv">97.77%</span>
+   <span class="lvd">평균 V* 4,253 · 순서 246,960</span></div><div class="lvrow sub"><span class="lvk mono">페이즈 5 (5회차)</span>
+   <span class="lvv">98.86%</span>
+   <span class="lvd">평균 V* 4,297 · 순서 123,480</span></div><div class="lvrow sub"><span class="lvk mono">페이즈 6 (6회차)</span>
+   <span class="lvv">96.93%</span>
+   <span class="lvd">평균 V* 4,215 · 순서 123,480</span></div><div class="lvrow sub"><span class="lvk mono">페이즈 7 (7회차)</span>
+   <span class="lvv">99.83%</span>
+   <span class="lvd">평균 V* 4,339 · 순서 246,960</span></div>
+ <div class="lvrow"><span class="lvk">구성별 최고</span>
+   <span class="lvv">100.00%</span>
+   <span class="lvd"><b class="mono">O>SZ</b> (6회차) — 이 구성이 나오면 사실상 실패하지 않습니다.</span></div>
+ <div class="lvrow"><span class="lvk">구성별 최난</span>
+   <span class="lvv">70.32%</span>
+   <span class="lvd"><b class="mono">Z>IJT</b> (4회차) — 최선을 두어도 이만큼만 풀립니다.</span></div>
 </div>
 
 <div class="notes">
@@ -125,10 +179,11 @@ footer a{color:var(--dim)}
   회차가 정해지면 0p 시점에 <b>보이는 구성</b>(어떤 미노가 몇 개 남았는지)이 결정됩니다.</p>
   <p>8회차는 1회차와 같은 위상이되 <b>미노 하나가 중복</b>된 형태입니다(<code>Z&gt;I</code> = Z가 하나 더, I가 없음).</p></div>
 
- <div class="note"><h3>V* 읽는 법</h3>
+ <div class="note"><h3>V*와 PC% 읽는 법</h3>
   <p><b>V*</b> = 이 셋업을 실제로 쓰게 되는 큐들의 조건부 기대값. 앞으로 <b>연속으로 몇 번 PC를 낼 수 있는지</b>의 기대치이고,
   이론 최댓값은 약 <b>4353.6</b>입니다. 실패(dead)는 0으로 포함해 평균냅니다.</p>
-  <p><b>PC%</b>는 이번 PC가 풀릴 실제 확률로, 일반 PC 솔버가 내는 값과 일치합니다.</p></div>
+  <p>셋업 카드의 <b>PC%</b>는 (필드, 남은 미노)만으로 정해지는 값이라 일반 PC 솔버 값과 일치하고,
+  평균 PC 확률은 <b>그 셋업을 실제로 쓰는 큐들</b>만 놓고 남은 리빌 순열을 전수 열거해 냅니다. 둘은 거의 같지만 미세하게 다릅니다.</p></div>
 
  <div class="note"><h3>커버링 집합</h3>
   <p>한 구성 안의 모든 큐 순서를 훑어, 각 순서가 <b>실제로 지을 수 있는</b> 셋업 중 가장 좋은 것을 고르고 합집합을 냅니다.
@@ -136,5 +191,36 @@ footer a{color:var(--dim)}
   <p>보드 그림은 4줄 필드, <b>사용</b> 칸은 그 셋업이 쓰는 미노, <b>큐</b> 수치는 그 셋업이 담당하는 순서 개수입니다.</p></div>
 </div>
 
-<footer>계산: 15.2M 필드 × 817,740 큐상태 MDP의 정확 V*(f64 policy iteration). 실제 movegen(SRS + Jstris 180)으로 빌드 가능성 검증.</footer>
-</div></body></html>
+<footer>계산: 15.2M 필드 × 817,740 큐상태 MDP의 정확 V*(f64 policy iteration). 실제 movegen(SRS + Jstris 180)으로 빌드 가능성 검증.
+<span id="mergenote"></span></footer>
+</div>
+<script>
+// The round pages' 통합 / X&gt;X toggles are stored site-wide; mirror them here so the 1회차
+// card and the overall average show the same view the reader last chose.
+const G={"0": [98.11099334224164, 4267.315561535123], "1": [98.11099331146745, 4267.315561476815]};
+function sync(){
+  const merge=localStorage.getItem('pcbook_merge')==='1', self=localStorage.getItem('pcbook_self')==='1';
+  const g=G[self?'1':'0'];
+  document.getElementById('g-pc').textContent=g[0].toFixed(2)+'%';
+  document.getElementById('g-pc2').textContent=g[0].toFixed(2)+'%';
+  document.getElementById('g-v').textContent=Math.round(g[1]).toLocaleString();
+  const c1=document.querySelector('.rcard[data-r="1"]'), c8=document.querySelector('.rcard[data-r="8"]');
+  const f=c1.dataset['v'+(self?'1':'0')+(merge?'1':'0')].split('|');
+  const put=(sel,t)=>c1.querySelector(sel).textContent=t;
+  put('.f-pc',(+f[0]).toFixed(1)); put('.f-v',(+f[1]).toLocaleString()); put('.f-lab',f[2]);
+  put('.f-set',(+f[3]).toLocaleString()); put('.f-avg',f[4]);
+  put('.f-hi',f[5]); put('.f-hip',f[6]); put('.f-lo',f[7]); put('.f-lop',f[8]);
+  c1.querySelector('.f-bar').style.width=Math.max(2,(f[0]-70)/0.30)+'%';
+  c8.style.display=merge?'none':'';
+  let lab=0,set=0;
+  document.querySelectorAll('.rcard').forEach(c=>{if(c.style.display==='none')return;
+    lab+=+c.querySelector('.f-lab').textContent.replace(/,/g,'');
+    set+=+c.querySelector('.f-set').textContent.replace(/,/g,'');});
+  document.getElementById('g-lab').textContent=lab.toLocaleString();
+  document.getElementById('g-set').textContent=set.toLocaleString();
+  document.getElementById('mergenote').textContent=
+    (merge?' · 8회차는 1회차 탭에 통합되어 있습니다':'')+(self?' · 1회차는 선두 미노별 X>X로 나뉘어 있습니다':'');
+}
+sync();
+addEventListener('pageshow',sync);
+</script></body></html>
