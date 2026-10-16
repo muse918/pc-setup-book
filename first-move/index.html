@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>첫 미노 최선수별 큐 · layer 0 V*</title>
+<style>
+:root {color-scheme:dark;--bg:#11151c;--panel:#1a2130;--line:#334057;--text:#e8edf6;--muted:#adb9cb;--accent:#77d9cf}
+* {box-sizing:border-box} body {margin:0;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,sans-serif}
+main {max-width:1420px;margin:auto;padding:28px 24px 70px} h1 {font-size:28px;margin:8px 0} h2 {font-size:20px;margin:0 0 10px}
+p {margin:8px 0 16px} a {color:var(--accent)} .muted {color:var(--muted)} nav {display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+nav a,.download,button {border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:7px 12px;color:var(--text);cursor:pointer;text-decoration:none}
+nav a.on,button.active {border-color:var(--accent);color:var(--accent)} button:focus-visible,a:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
+.stats {display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.stat {padding:14px 20px;background:var(--panel);border:1px solid var(--line);border-radius:9px}.stat b {display:block;font-size:25px}
+.controls {display:flex;gap:12px;flex-wrap:wrap;padding:16px;background:var(--panel);border-radius:9px;margin:20px 0} label {display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:13px}
+input,select {font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:8px;min-width:110px} input[type=checkbox] {min-width:0}.check {flex-direction:row;align-items:center}
+.layout {display:grid;grid-template-columns:minmax(300px,42%) minmax(0,1fr);gap:22px;align-items:start}.cards {display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;max-height:75vh;overflow:auto;padding:2px}
+.card {padding:12px;text-align:left;display:block}.card .title {font-weight:700}.card small {display:block;color:var(--muted)}.card svg {display:block;width:100%;margin:8px 0}.card.zero {opacity:.6}
+.detail {border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:18px;min-width:0}.detail svg {width:100%;max-width:450px;display:block;margin:10px 0}
+.tablewrap {overflow:auto} table {border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;white-space:nowrap} th,td {padding:8px 10px;border-bottom:1px solid var(--line);text-align:left} th {color:var(--muted);font-size:13px} code {font:14px ui-monospace,monospace;letter-spacing:.04em}
+.pager {display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}.downloads {display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}.pi {color:var(--accent)} [hidden] {display:none!important}
+.state-row {cursor:pointer}.state-row:hover,.state-row:focus-visible {background:#273349;outline:1px solid var(--accent)}
+dialog {color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:12px;width:min(1000px,94vw);max-height:88vh;padding:24px}
+dialog::backdrop {background:#000b}.dialog-head {display:flex;gap:16px;justify-content:space-between;align-items:start}.alternatives {display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:18px}
+.alternative {text-align:left;min-width:0}.alternative svg {display:block;width:100%;margin:10px 0}.alternative small {display:block;color:var(--muted)}.value {overflow-wrap:anywhere}
+@media (max-width:850px) {.layout {grid-template-columns:1fr}.cards {max-height:340px}main {padding:18px 12px} h1 {font-size:23px}}
+</style>
+</head>
+<body><main>
+<p><a class="download" href="../">← 4p 셋업 커버링 북</a> <a class="download" href="l0_vstar.zip" download>전체 보고서 ZIP · 오프라인용</a></p>
+<div class="muted">PCFINDER · V* OPTIMAL FIRST MOVES</div>
+<h1 id="heading">첫 미노 최선수별 큐</h1>
+<p class="muted">빈 보드의 layer 0 상태를 <b>V* 기준 최선수의 미노 종류 + 배치 위치</b>별로 묶었습니다. 최선수가 여러 개면 해당하는 모든 배치에 중복 표시합니다. <b>큐 목록의 행을 누르면 같은 상태의 다른 최선수들을 볼 수 있습니다.</b></p>
+<nav id="nav" aria-label="회차"></nav>
+<p id="policy" class="muted"></p>
+<div class="stats" id="stats"></div>
+<div class="downloads"><a class="download" href="groups.csv">전체 배치별 집계 CSV</a><a class="download" href="states.tsv">전체 quotient state TSV</a><a class="download" href="manifest.json">데이터 기준·원본 정보</a><a class="download" id="roundcsv" hidden>이번 회차 전체 큐 CSV</a></div>
+<p class="muted">원본 V*는 f32 저장값이며, 배치의 Q값은 리빌별 다음 V*를 f64로 평균했습니다. 최고 Q값과 정확히 같은 배치를 모두 최선수로 표시합니다(허용 오차 0). 반올림 전 수학적 동률을 보증하는 판정은 아닙니다.</p>
+<p class="muted">전체 state·홀드·큐 수는 중복을 제외합니다. 배치별 수와 CSV에는 동률 상태가 여러 번 들어가므로 합계와 비율의 합은 전체 수·100%를 넘을 수 있습니다. 실제 방문 확률은 아닙니다. 8회차는 풀백 중복 구성이고, 봇의 cycle_round는 1입니다.</p>
+<section id="overview" hidden></section>
+<section id="browser" hidden>
+<div class="controls">
+<label>배치할 미노<select id="piece"><option value="">전체</option></select></label>
+<label>구성<select id="composition"><option value="">전체</option></select></label>
+<label>홀드<select id="hold"><option value="">전체</option></select></label>
+<label>큐 접두사 (? · * 사용 가능)<input id="queue" placeholder="예: IJ 또는 I?L*" autocomplete="off" spellcheck="false"></label>
+<label>bag_mask 또는 남은 미노 전체<input id="bag" placeholder="예: 127 또는 IJLOSTZ" autocomplete="off" spellcheck="false"></label>
+<label class="check"><input id="unused" type="checkbox">선택되지 않은 배치도 표시</label>
+<label class="check"><input id="multi" type="checkbox">최선수가 여러 개인 큐만</label>
+</div>
+<p id="matching" class="muted" aria-live="polite"></p>
+<div class="layout"><div class="cards" id="cards" aria-label="첫 배치 목록"></div><article class="detail" id="detail"></article></div>
+</section>
+<dialog id="state-dialog" aria-labelledby="state-title"><div class="dialog-head"><h2 id="state-title">이 상태의 최선수</h2><button id="dialog-close" aria-label="닫기">닫기 ✕</button></div><div id="state-info"></div><div id="alternatives" class="alternatives"></div></dialog>
+</main>
+<script id="report-data" type="application/json">{"round":0,"values":"Vstar_fullV","summary":[{"round":1,"n":2520,"queues":5040,"selected":38,"placements":162,"memberships":2826,"queue_memberships":5652,"tied":294,"tied_queues":588,"max_optimal":4},{"round":2,"n":220500,"queues":308700,"selected":156,"placements":162,"memberships":379228,"queue_memberships":521533,"tied":83619,"tied_queues":113020,"max_optimal":33},{"round":3,"n":35280,"queues":35280,"selected":98,"placements":162,"memberships":55024,"queue_memberships":55024,"tied":14185,"tied_queues":14185,"max_optimal":8},{"round":4,"n":194040,"queues":246960,"selected":110,"placements":162,"memberships":232129,"queue_memberships":293692,"tied":30675,"tied_queues":36719,"max_optimal":14},{"round":5,"n":70560,"queues":123480,"selected":133,"placements":162,"memberships":147471,"queue_memberships":259425,"tied":36525,"tied_queues":63025,"max_optimal":16},{"round":6,"n":105840,"queues":123480,"selected":96,"placements":162,"memberships":126122,"queue_memberships":145650,"tied":15297,"tied_queues":17088,"max_optimal":10},{"round":7,"n":158760,"queues":246960,"selected":142,"placements":162,"memberships":290749,"queue_memberships":445559,"tied":59962,"tied_queues":89330,"max_optimal":16},{"round":8,"n":30240,"queues":30240,"selected":85,"placements":162,"memberships":43497,"queue_memberships":43497,"tied":8060,"tied_queues":8060,"max_optimal":11}],"groups":[],"states":[]}</script>
+<script>
+'use strict';
+const D=JSON.parse(document.getElementById('report-data').textContent);
+const ORD='IJLOSTZ', COLORS={I:'#31c7ef',J:'#5982ed',L:'#ef962e',O:'#f5d338',S:'#64cb74',T:'#c879d8',Z:'#ef6977'};
+const $=id=>document.getElementById(id), num=n=>n.toLocaleString('en-US'), hex=n=>'0x'+n.toString(16).toUpperCase().padStart(4,'0');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const bagString=mask=>[...ORD].filter((p,i)=>mask&(1<<i)).join('');
+function board(g) {
+  const occupied=new Set(g.cells.map(([x,y])=>x+','+y));
+  let out='<svg viewBox="0 0 240 96" role="img" aria-label="'+esc(g.piece)+' 첫 배치: 왼쪽이 1열, 아래가 바닥">';
+  for(let y=3;y>=0;y--) for(let x=0;x<10;x++) out+='<rect x="'+(x*24+1)+'" y="'+((3-y)*24+1)+'" width="22" height="22" rx="2" fill="'+(occupied.has(x+','+y)?COLORS[g.piece]:'#283247')+'"/>';
+  return out+'</svg>';
+}
+function stat(label,n) {return '<div class="stat"><span class="muted">'+label+'</span><b>'+num(n)+'</b></div>'}
+function expand(s) {
+  const [qid,comp,avail,tail,bag,dirs,value,codes]=s, out=[];
+  if(dirs&1)out.push({qid,comp,hold:avail[0],queue:avail[1]+tail,bag,value,codes});
+  if(dirs&2)out.push({qid,comp,hold:avail[1],queue:avail[0]+tail,bag,value,codes});
+  return out;
+}
+$('nav').innerHTML=[0,1,2,3,4,5,6,7,8].map(r=>'<a class="'+(r===D.round?'on':'')+'" href="'+(r?'round'+r:'index')+'.html">'+(r?r+'회차':'전체')+'</a>').join('');
+$('policy').textContent='값 테이블: '+D.values+' · Q(s,a) = 리빌별 layer 1 V*의 평균 · 좌표: x=0이 왼쪽, y=0이 바닥';
+if(!D.round) {
+  $('overview').hidden=false;
+  $('stats').innerHTML=stat('전체 quotient state',D.summary.reduce((n,r)=>n+r.n,0))+stat('전체 홀드·큐 상태',D.summary.reduce((n,r)=>n+r.queues,0))+stat('최선수가 여러 개인 state',D.summary.reduce((n,r)=>n+r.tied,0));
+  $('overview').innerHTML='<div class="tablewrap"><table><thead><tr><th>회차</th><th>quotient state</th><th>홀드·큐 상태</th><th>최선수인 배치 수</th><th>복수 최선수 state</th><th>최선수 최대 개수</th><th>큐 목록</th></tr></thead><tbody>'+D.summary.map(r=>'<tr><td><a href="round'+r.round+'.html">'+r.round+'회차</a></td><td>'+num(r.n)+'</td><td>'+num(r.queues)+'</td><td>'+r.selected+'</td><td>'+num(r.tied)+'</td><td>'+r.max_optimal+'</td><td><a href="round'+r.round+'_queues.csv">CSV</a></td></tr>').join('')+'</tbody></table></div>';
+} else {
+  $('browser').hidden=false; $('heading').textContent=D.round+'회차 · 첫 미노 최선수별 큐';
+  $('stats').innerHTML=stat('quotient state',D.summary.n)+stat('홀드·큐 상태',D.summary.queues)+stat('최선수인 첫 배치',D.summary.selected)+stat('복수 최선수 state',D.summary.tied);
+  $('roundcsv').hidden=false; $('roundcsv').href='round'+D.round+'_queues.csv';
+  for(const id of ['piece','hold'])for(const p of ORD){const o=document.createElement('option');o.value=p;o.textContent=p;$(id).append(o)}
+  const labels=[...new Set(D.states.map(s=>s[1]))].sort();
+  for(const label of labels){const o=document.createElement('option');o.value=label;o.textContent=label;$('composition').append(o)}
+  let selected=null, page=0, visible=[], activeRows=[], timer;
+  const PAGE=100;
+  function filters() {
+    const q=$('queue').value.toUpperCase().replace(/\s/g,''), rawBag=$('bag').value.toUpperCase().replace(/\s/g,'');
+    const validQueue=/^[IJLOSTZ?*]*$/.test(q);
+    const regex=validQueue?new RegExp('^'+q.replace(/\?/g,'.').replace(/\*/g,'.*')):null;
+    let bag=null;
+    if(rawBag) {if(/^\d+$/.test(rawBag))bag=Number(rawBag);else if(/^[IJLOSTZ]+$/.test(rawBag))bag=[...new Set(rawBag)].reduce((m,p)=>m|(1<<ORD.indexOf(p)),0);else bag=-1}
+    return {piece:$('piece').value,composition:$('composition').value,hold:$('hold').value,regex,bag,multi:$('multi').checked};
+  }
+  function matching(g,f) {
+    const out=[];
+    if(f.piece && g.piece!==f.piece)return out;
+    for(const i of g.ids) {
+      const s=D.states[i];
+      if(f.multi && s[7].length<2)continue;
+      if(f.composition && s[1]!==f.composition)continue;
+      if(f.bag!==null && s[4]!==f.bag)continue;
+      for(const row of expand(s))if((!f.hold||row.hold===f.hold)&&f.regex&&f.regex.test(row.queue))out.push(row);
+    }
+    return out;
+  }
+  function repaint() {
+    const f=filters();visible=[];let total=0;const unique=new Set();
+    for(const g of D.groups){const rows=matching(g,f);if(rows.length||($('unused').checked&&!g.n&&(!f.piece||g.piece===f.piece))){visible.push({g,rows});total+=rows.length;for(const r of rows)unique.add(r.qid*7+ORD.indexOf(r.hold))}}
+    visible.sort((a,b)=>b.rows.length-a.rows.length||a.g.code-b.g.code);
+    $('matching').textContent='조건에 맞는 배치 '+num(visible.length)+'개 · 홀드·큐 '+num(unique.size)+'개 · 중복 포함 '+num(total)+'건';
+    if(!visible.some(v=>v.g.code===selected))selected=visible.length?visible[0].g.code:null;
+    page=0;drawCards();drawDetail();
+  }
+  function drawCards() {
+    $('cards').innerHTML=visible.map(({g,rows})=>'<button class="card '+(g.code===selected?'active ':'')+(!g.n?'zero':'')+'" data-code="'+g.code+'"><span class="title">'+g.piece+' · '+g.orientation+'</span>'+board(g)+'<small class="pi">배치 '+hex(g.code)+' · edge '+g.edge+'</small><small>일치 '+num(rows.length)+' / 전체 '+num(g.queues)+' 큐</small><small>'+num(g.n)+' state · '+(100*g.n/D.summary.n).toFixed(3)+'%</small></button>').join('');
+    for(const b of $('cards').querySelectorAll('button'))b.onclick=()=>{selected=Number(b.dataset.code);page=0;drawCards();drawDetail()};
+  }
+  function drawDetail() {
+    const entry=visible.find(v=>v.g.code===selected);
+    if(!entry){$('detail').innerHTML='<p>조건에 맞는 큐가 없습니다.</p>';activeRows=[];return}
+    const {g,rows}=entry;activeRows=rows;
+    const lo=page*PAGE, hi=Math.min(lo+PAGE,rows.length);
+    const columns=g.cells.length?Math.min(...g.cells.map(c=>c[0]))+1:0;
+    const right=g.cells.length?Math.max(...g.cells.map(c=>c[0]))+1:0;
+    $('detail').innerHTML='<h2>'+g.piece+' · '+g.orientation+' · '+columns+'~'+right+'열</h2>'+board(g)+'<p><span class="pi">배치 '+hex(g.code)+' ('+g.code+')</span> · edge '+g.edge+'<br>TBP anchor ('+g.x+', '+g.y+') · field '+g.field+' · hash '+g.hash+'</p><p class="muted">이 배치가 최선수인 state '+num(g.n)+'개 / 홀드·큐 '+num(g.queues)+'개. 현재 조건에 맞는 홀드·큐 '+num(rows.length)+'개. <b>행을 누르면 다른 최선수들이 열립니다.</b></p><button id="save">이 배치의 검색 결과 CSV</button><div class="pager"><button id="prev" '+(!page?'disabled':'')+'>이전</button><span>'+(rows.length?num(lo+1):0)+'–'+num(hi)+' / '+num(rows.length)+'</span><button id="next" '+(hi>=rows.length?'disabled':'')+'>다음</button></div><div class="tablewrap"><table><thead><tr><th>qid</th><th>구성</th><th>홀드</th><th>큐 (현재 →)</th><th>bag</th><th>홀드 사용</th><th>남는 홀드</th><th>V* 기준 최고 Q</th><th>최선수</th></tr></thead><tbody>'+rows.slice(lo,hi).map((row,i)=>{const use=g.piece!==row.queue[0];return '<tr class="state-row" tabindex="0" data-index="'+(lo+i)+'" aria-label="qid '+row.qid+'의 최선수 '+row.codes.length+'개 보기"><td>'+row.qid+'</td><td>'+esc(row.comp)+'</td><td><code>'+row.hold+'</code></td><td><code>'+row.queue+'</code></td><td><code>'+bagString(row.bag)+'</code> ('+row.bag+')</td><td>'+(use?'사용':'유지')+'</td><td>'+(use?row.queue[0]:row.hold)+'</td><td>'+row.value.toFixed(9)+'</td><td><button class="best-count">'+row.codes.length+'개 보기</button></td></tr>'}).join('')+'</tbody></table></div>';
+    $('prev').onclick=()=>{page--;drawDetail()};$('next').onclick=()=>{page++;drawDetail()};
+    $('save').onclick=()=>saveCSV(g);
+    for(const tr of $('detail').querySelectorAll('.state-row')) {
+      tr.onclick=()=>showState(activeRows[Number(tr.dataset.index)]);
+      tr.onkeydown=e=>{if(e.target===tr&&(e.key==='Enter'||e.key===' ')){e.preventDefault();showState(activeRows[Number(tr.dataset.index)])}};
+    }
+  }
+  function showState(row) {
+    $('state-title').textContent='이 상태의 최선수 '+row.codes.length+'개';
+    $('state-info').innerHTML='<p>qid '+row.qid+' · 구성 '+esc(row.comp)+'<br>홀드 <code>'+row.hold+'</code> · 큐 <code>'+row.queue+'</code> · bag <code>'+bagString(row.bag)+'</code> ('+row.bag+')</p><p class="value">최고 Q = '+row.value.toPrecision(17)+'</p><p class="muted">모든 배치가 동일한 최고 Q값입니다. 배치를 누르면 그 배치의 큐 목록으로 이동합니다.</p>';
+    const options=row.codes.map(code=>D.groups.find(g=>g.code===code));
+    $('alternatives').innerHTML=options.map(g=>{
+      const use=g.piece!==row.queue[0],left=Math.min(...g.cells.map(c=>c[0]))+1,right=Math.max(...g.cells.map(c=>c[0]))+1;
+      return '<button class="alternative '+(g.code===selected?'active':'')+'" data-code="'+g.code+'"><b>'+g.piece+' · '+g.orientation+' · '+left+'~'+right+'열</b>'+board(g)+'<small>배치 '+hex(g.code)+' · edge '+g.edge+'</small><small>홀드 '+(use?'사용':'유지')+' · 남는 홀드 '+(use?row.queue[0]:row.hold)+'</small><small>'+(g.code===selected?'현재 보고 있는 배치':'이 배치의 큐 목록 보기')+'</small></button>';
+    }).join('');
+    for(const button of $('alternatives').querySelectorAll('button'))button.onclick=()=>{
+      const code=Number(button.dataset.code);$('state-dialog').close();
+      if($('piece').value&&$('piece').value!==D.groups.find(g=>g.code===code).piece)$('piece').value='';
+      selected=code;repaint();
+      const entry=visible.find(v=>v.g.code===code);
+      const index=entry?entry.rows.findIndex(r=>r.qid===row.qid&&r.hold===row.hold):-1;
+      if(index>=0){page=Math.floor(index/PAGE);drawDetail();const target=$('detail').querySelector('[data-index="'+index+'"]');target?.focus({preventScroll:true});target?.scrollIntoView({block:'nearest'})}
+    };
+    $('state-dialog').showModal();
+  }
+  $('dialog-close').onclick=()=>$('state-dialog').close();
+  $('state-dialog').onclick=e=>{if(e.target===$('state-dialog')){const r=$('state-dialog').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('state-dialog').close()}};
+  function saveCSV(g) {
+    const lines=['round,action_code,placed,edge_index,qid,composition,hold,queue,bag_mask,bag_remaining,use_hold,hold_after,best_value,optimal_count,optimal_codes'];
+    for(const r of activeRows){const use=g.piece!==r.queue[0];lines.push([D.round,g.code,g.piece,g.edge,r.qid,r.comp,r.hold,r.queue,r.bag,bagString(r.bag),Number(use),use?r.queue[0]:r.hold,r.value.toPrecision(17),r.codes.length,r.codes.join(';')].join(','))}
+    const url=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'}));
+    const a=document.createElement('a');a.href=url;a.download='round'+D.round+'_vstar_'+hex(g.code)+'_queues.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  for(const id of ['piece','composition','hold','unused','multi'])$(id).addEventListener('change',repaint);
+  for(const id of ['queue','bag'])$(id).addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(repaint,180)});
+  repaint();
+}
+</script>
+</body>
+</html>

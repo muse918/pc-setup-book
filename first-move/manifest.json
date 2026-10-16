@@ -1,0 +1,133 @@
+{
+  "policy_reference_only": "/mnt/fast1/muse918/pcfinder_qpreq/pi_policy_v5_f64",
+  "pruned": "/mnt/fast1/muse918/pcfinder_layers/forward_pruned_4line_qopt_target_owned",
+  "values": "/mnt/fast1/muse918/pcfinder_layers/Vstar_fullV",
+  "tie_absolute_tolerance": 0.0,
+  "graph": "/mnt/fast2/muse918/pcfinder/graph.bin",
+  "sources_sha256": {
+    "/home/muse918/mnt/fast1/pcfinder_qpreq/pi_policy_v5_f64/layer0.policy.u16.bin": "04bd6cdea36a7e5e160c6a638264dbee00ff4b2a9e66f4ca65d229ff8dc97269",
+    "/home/muse918/mnt/fast1/pcfinder_layers/forward_pruned_4line_qopt_target_owned/layer0q_pruned.field_index.bin": "040ade4e92a83fdd5e2da7d4af2beafb06613e5081d8b28c4126e9ed6d7cfe0e",
+    "/home/muse918/mnt/fast1/pcfinder_layers/forward_pruned_4line_qopt_target_owned/layer0q_pruned.chains.u24.bin": "9df578fbdadd67f7b86adf5123bcc8411d538fd3d2a6ff7432dc2c0bd4eae666",
+    "/home/muse918/mnt/fast1/pcfinder_layers/forward_pruned_4line_qopt_target_owned/layer1q_pruned.field_index.bin": "74d8c0114e07aed86e68e22a6cbfe375a27c09dc22d2c7a99ba05a7688842ac1",
+    "/home/muse918/mnt/fast1/pcfinder_layers/forward_pruned_4line_qopt_target_owned/layer1q_pruned.chains.u24.bin": "adeb30c08f6699f9f444fecdb793dfa5487d1dd55cb5af553112bc2aed4a5ec0",
+    "/home/muse918/mnt/fast1/pcfinder_layers/Vstar_fullV/layer0.values.f32.bin": "0d9eeb5026ff928ce28e877fecdf4ab77b2f0f12119c62a9be18f193ebc1f157",
+    "/home/muse918/mnt/fast1/pcfinder_layers/Vstar_fullV/layer1.values.f32.bin": "755e733050532bc66a2192a520c0a51bae548f3d95a98d5505a87954e8d19367"
+  },
+  "quotient_states": 817740,
+  "oriented_states": 1120140,
+  "rounds": [
+    {
+      "round": 1,
+      "n": 2520,
+      "queues": 5040,
+      "selected": 38,
+      "placements": 162,
+      "memberships": 2826,
+      "queue_memberships": 5652,
+      "tied": 294,
+      "tied_queues": 588,
+      "max_optimal": 4
+    },
+    {
+      "round": 2,
+      "n": 220500,
+      "queues": 308700,
+      "selected": 156,
+      "placements": 162,
+      "memberships": 379228,
+      "queue_memberships": 521533,
+      "tied": 83619,
+      "tied_queues": 113020,
+      "max_optimal": 33
+    },
+    {
+      "round": 3,
+      "n": 35280,
+      "queues": 35280,
+      "selected": 98,
+      "placements": 162,
+      "memberships": 55024,
+      "queue_memberships": 55024,
+      "tied": 14185,
+      "tied_queues": 14185,
+      "max_optimal": 8
+    },
+    {
+      "round": 4,
+      "n": 194040,
+      "queues": 246960,
+      "selected": 110,
+      "placements": 162,
+      "memberships": 232129,
+      "queue_memberships": 293692,
+      "tied": 30675,
+      "tied_queues": 36719,
+      "max_optimal": 14
+    },
+    {
+      "round": 5,
+      "n": 70560,
+      "queues": 123480,
+      "selected": 133,
+      "placements": 162,
+      "memberships": 147471,
+      "queue_memberships": 259425,
+      "tied": 36525,
+      "tied_queues": 63025,
+      "max_optimal": 16
+    },
+    {
+      "round": 6,
+      "n": 105840,
+      "queues": 123480,
+      "selected": 96,
+      "placements": 162,
+      "memberships": 126122,
+      "queue_memberships": 145650,
+      "tied": 15297,
+      "tied_queues": 17088,
+      "max_optimal": 10
+    },
+    {
+      "round": 7,
+      "n": 158760,
+      "queues": 246960,
+      "selected": 142,
+      "placements": 162,
+      "memberships": 290749,
+      "queue_memberships": 445559,
+      "tied": 59962,
+      "tied_queues": 89330,
+      "max_optimal": 16
+    },
+    {
+      "round": 8,
+      "n": 30240,
+      "queues": 30240,
+      "selected": 85,
+      "placements": 162,
+      "memberships": 43497,
+      "queue_memberships": 43497,
+      "tied": 8060,
+      "tied_queues": 8060,
+      "max_optimal": 11
+    }
+  ],
+  "definitions": {
+    "action_code": "(placed << 8) | edge_index",
+    "optimal": "all actions whose f64 reveal average of layer1 V* equals the maximum exactly",
+    "precision": "materialized V* is f32; Q is summed/divided in f64 with no f32 rounding or tolerance; ties are with respect to this stored table, not a proof of equality of the unrounded mathematical values",
+    "missing_successors": "pruned successors have value zero and still count in the reveal denominator",
+    "round": "dump-round-sheet convention; full bag with an old-bag duplicate is round 8",
+    "cycle_round": "play-policy convention; round 8 is cycle_round 1",
+    "state": "(empty field, unordered {hold,queue[0]}, queue[1..6], bag_mask)",
+    "oriented": "only orientations accepted by state::is_valid_state",
+    "queue": "6 visible pieces including the active piece, leftmost plays first",
+    "bag": "unrevealed pieces remaining in the reveal bag, not the visible queue's old-bag remainder",
+    "coordinates": "physical screen cells; x=0 leftmost, y=0 bottom; TBP orientation/anchor",
+    "counts": "exhaustive counts of valid states, not visitation probabilities",
+    "ties": "every maximum is included; a state with k optimal actions occurs in k placement groups",
+    "shares": "group shares use unique-state denominators, so summed shares can exceed 100 percent",
+    "unused": "groups.csv includes legal first placements even if their state count is zero"
+  }
+}

@@ -5,6 +5,17 @@
 
 **→ https://muse918.github.io/pc-setup-book/**
 
+파생 도구: **[첫 미노 V* 최선수 탐색기](https://muse918.github.io/pc-setup-book/first-move/)**
+
+빈 보드 layer 0의 817,740개 quotient state / 1,120,140개 유효 홀드·큐 상태를
+1~8회차의 첫 배치별로 조회합니다. 최선수가 여러 개면 해당하는 모든 배치에 중복 표시하고,
+큐 행을 누르면 모든 최선수의 배치 그림·홀드 사용·남는 홀드를 비교할 수 있습니다.
+CSV와 [오프라인 보고서 ZIP](https://muse918.github.io/pc-setup-book/first-move/l0_vstar.zip)도 제공합니다.
+
+최선수 판정은 저장된 f32 V* 테이블의 layer 1 값을 f64로 리빌 평균한 Q값의 argmax입니다.
+허용 오차는 0이며, 반올림 전 수학적 동률을 보증하는 판정은 아닙니다.
+248,617개 quotient state에 복수 최선수가 있습니다.
+
 | | |
 |---|---|
 | 전체 평균 PC 확률 | **98.11%** (7개 bag 페이즈 균등) |

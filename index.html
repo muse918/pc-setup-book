@@ -28,9 +28,9 @@ h2{font-size:15px;text-transform:uppercase;letter-spacing:.09em;color:var(--fain
 .rn small{font-size:11px;color:var(--faint);font-weight:500}
 .rc-stat b small{font-weight:500}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(246px,1fr));gap:14px}
-.rcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:inherit;
+.rcard,.tool-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:inherit;
  display:flex;flex-direction:column;gap:7px;transition:border-color .15s,transform .15s}
-.rcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.rcard:hover,.tool-card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .rc-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
 .rn{font-size:19px;font-weight:680;letter-spacing:-.01em}
 .rl{font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
@@ -60,6 +60,12 @@ footer a{color:var(--dim)}
 <h1>퍼펙트 클리어 4p 셋업 커버링 북</h1>
 <p class="lede">완전탐색 봇이 계산한 <b>V*</b>(무한 연속 PC 기대 개수)로 회차별 4p 셋업을 평가한 전집.
 각 회차·구성마다 <b>어떤 큐가 오더라도 그 큐의 최선 셋업을 쓸 수 있는</b> 최소 커버링 집합을 싣습니다.</p>
+
+<a class="tool-card" href="first-move/" style="margin-top:22px;border-color:var(--accent)">
+ <div class="rc-top"><span class="rn">첫 미노 V* 최선수 탐색기</span><span class="rl">파생 도구 →</span></div>
+ <div class="lede">회차별 첫 배치마다 어떤 홀드·큐에서 최선수인지 전수 조회합니다.
+ 동률인 모든 방안을 함께 표시하며, 큐 행을 눌러 다른 최선수의 배치와 남는 홀드를 비교할 수 있습니다.</div>
+</a>
 
 <div class="tot">
  <div class="t hero"><div class="k">전체 평균 PC 확률</div><div class="v" id="g-pc">98.11%</div>
